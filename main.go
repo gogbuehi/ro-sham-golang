@@ -10,7 +10,7 @@ import (
 
 func main() {
 	fmt.Println("Ro Sham Golang")
-	http.HandleFunc("/", indexHandler)
+	http.HandleFunc("/", IndexHandler)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
@@ -22,7 +22,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
-func indexHandler(w http.ResponseWriter, r *http.Request) {
+func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
 		return
@@ -30,6 +30,10 @@ func indexHandler(w http.ResponseWriter, r *http.Request) {
 	queryData := r.URL.Query()
 	userPlayValue, queryErr := strconv.Atoi(queryData.Get("play"))
 	if queryErr != nil {
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+	if userPlayValue < 0 || userPlayValue > 2 {
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
