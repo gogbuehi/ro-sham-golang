@@ -1,0 +1,13 @@
+{
+  "name": "Ro Sham Golang",
+  "description": "Getting this to work on Heroku",
+  "keywords": [
+    "golang",
+    "api",
+    "docker",
+    "heroku"
+  ],
+  "website": "https://gogbuehi.com/",
+  "repository": "https://github.com/gogbuehi/ro-sham-golang",
+  "stack": "container"
+}
