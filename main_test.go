@@ -7,16 +7,16 @@ import (
 )
 
 func TestIndexHandler(t *testing.T) {
-
 	tests := []struct {
 		playQuerystring string
 		statusCode      int
+		contentType     string
 	}{
-		{playQuerystring: "/", statusCode: 500},
-		{playQuerystring: "/?play=0", statusCode: 200},
-		{playQuerystring: "/?play=1", statusCode: 200},
-		{playQuerystring: "/?play=2", statusCode: 200},
-		{playQuerystring: "/?play=3", statusCode: 500},
+		{playQuerystring: "/", statusCode: 500, contentType: ""},
+		{playQuerystring: "/?play=0", statusCode: 200, contentType: "application/json"},
+		{playQuerystring: "/?play=1", statusCode: 200, contentType: "application/json"},
+		{playQuerystring: "/?play=2", statusCode: 200, contentType: "application/json"},
+		{playQuerystring: "/?play=3", statusCode: 500, contentType: ""},
 	}
 	for _, playData := range tests {
 		// Set up a new request.[
@@ -30,10 +30,15 @@ func TestIndexHandler(t *testing.T) {
 		rr := httptest.NewRecorder()
 
 		http.HandlerFunc(IndexHandler).ServeHTTP(rr, req)
+
 		statusCode := rr.Result().StatusCode
 		if statusCode != playData.statusCode {
 			t.Errorf("Expected Status Code (%v), Got Status Code(%v)", playData.statusCode, statusCode)
 		}
-	}
 
+		contentType := rr.Result().Header.Get("Content-Type")
+		if contentType != playData.contentType {
+			t.Errorf("Expected Content Type (%v), Got Content Type (%v)", playData.contentType, contentType)
+		}
+	}
 }

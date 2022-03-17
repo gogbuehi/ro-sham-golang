@@ -3,20 +3,6 @@ package main
 import "testing"
 
 func TestRockPaperScissor(t *testing.T) {
-	//tests := []struct {
-	//  name string
-	//  want int
-	//}{
-	//  {name: "Test", want: 1},
-	//}
-	//for _, tt := range tests {
-	//  t.Run(tt.name, func(t *testing.T) {
-	//    if got := RockPaperScissor(); got != tt.want {
-	//      t.Errorf("RockPaperScissor() = %v, want %v", got, tt.want)
-	//    }
-	//  })
-	//}
-
 	t.Run("Random value", func(t *testing.T) {
 		var gotchas [3]bool
 		tries := 9

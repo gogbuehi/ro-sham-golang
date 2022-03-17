@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -22,6 +23,12 @@ func main() {
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%s", port), nil))
 }
 
+type PlayResult struct {
+	ComputerPlayValue int
+	UserPlayValue     int
+	PlayOutcome       int
+}
+
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.NotFound(w, r)
@@ -41,8 +48,14 @@ func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	playValue := RockPaperScissor()
 
 	gameOutcome := PlayAgainst(userPlayValue, playValue)
-	gameString := "You (" + PlayValue(userPlayValue) + ") vs RoSham (" + PlayValue(playValue) + ") / Outcome: " + WinnerValue(gameOutcome)
-	_, err := fmt.Fprint(w, gameString)
+	gameResult := PlayResult{
+		ComputerPlayValue: playValue,
+		UserPlayValue:     userPlayValue,
+		PlayOutcome:       gameOutcome,
+	}
+	jsonGame, _ := json.Marshal(gameResult)
+	w.Header().Set("Content-Type", "application/json")
+	_, err := fmt.Fprint(w, string(jsonGame))
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
